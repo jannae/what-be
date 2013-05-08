@@ -45,13 +45,11 @@ def ibgram_by_word(words,rel_word):
 # Function for returning a bigram for a particular word based on the most likely following tag
 def bgram_word_tag(tagged,rel_word,tag):
 	bgrams = []
-	print 'tagpre: '+tag[0]
 	for ((w1, t1), (w2, t2)) in nltk.bigrams(tagged):
 		if w1 == rel_word and t2.startswith(tag[0]):
 			bgrams.append(w2.lower())
 	if len(bgrams) == 0:
 		bgrams.append(ran(get_words(tagged,tag[0])))
-	print len(bgrams)
 	return list(set(bgrams))
 
 # Function for returning a bigram for a particular word to follow a phrase based on the most likely following tag of the last word in the phrase
@@ -60,7 +58,6 @@ def chain_phrase(tagged,rel_word,size=3):
 	for i in xrange(size):
 		tag = ran(depunc(nextags(tagged,rel_word)))
 		if tag is not None:
-			print 'tagpre: '+tag[0]
 			for ((w1, t1), (w2, t2)) in nltk.bigrams(tagged):
 				if w1 == rel_word and t2.startswith(tag[0]):
 					rel_word = w2.lower()
@@ -68,7 +65,6 @@ def chain_phrase(tagged,rel_word,size=3):
 				rel_word = ran(get_words(tagged,tag[0]))
 		else:
 			rel_word = ran(get_words(tagged,'N'))
-		print rel_word
 		bgrams.append(rel_word)
 	return ' '.join(bgrams)
 
@@ -76,13 +72,11 @@ def bgram_phrase(tagged,rel_word):
 	bgrams = []
 	tag = ran(depunc(nextags(tagged,rel_word)))
 	if tag is not None:
-		print 'tagpre: '+tag[0]
 		for ((w1, t1), (w2, t2)) in nltk.bigrams(tagged):
 			if w1 == rel_word and t2.startswith(tag[0]):
 				bgrams.append(w2.lower())
 		if len(bgrams) == 0:
 			bgrams.append(ran(get_words(tagged,tag[0])))
-		print len(bgrams)
 	else:
 		bgrams.append(ran(get_words(tagged,'N')))
 	return list(set(bgrams))

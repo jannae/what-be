@@ -23,60 +23,38 @@ sents = brown.sents(categories=cats)
 words_tagged = brown.tagged_words(categories=cats)
 sents_tagged = brown.tagged_sents(categories=cats)
 
-# seps = ['IN','RB','MD','HV','DO','TO']
+# Create our collection of phrases to be mucked together
+# ques = preps = verbph = nounph = []
 
-adjs = get_words(words_tagged,'J')
-# verbs = get_words(words_tagged,'V')
-nouns = get_words(words_tagged,'NN') # only common nouns
-# whs = get_words(words_tagged,'W')
-# bes = get_words(words_tagged,'B')
-# advs = get_words(words_tagged,'R')
-# qual = get_words(words_tagged,'Q')
-conj = get_words(words_tagged,'CC')
-pron = get_exact_words(words_tagged,'PPS')
-moda = get_words(words_tagged,'MD')
-
-# Create our collection of question beginnings
-ques = []
+# Question beginnings
 ques = phrasebytag(sents_tagged,'W','BE')
-
-preps = []
+# Prepositional phrases
 preps = phrasebytag(sents_tagged,'IN','AT')
-
-verbph = []
+# Verb phrases
 verbph = phrasebytag(sents_tagged,'R','V')
-
-nounph = []
+# Noun phrases
 nounph = phrasebytag(sents_tagged,'N','V')
+# Special pronoun phrase for mocking
+mock = bgram_by_tag(words_tagged,'PPS','MD')
 
 #start fresh.
 what = ''
 
-# Begin with 'what'
-# start = 'what'
-
 # We'll do this a few times. Just 3 for now.
 for x in range(0, iterate):
-	print str(x)+'::'
+	# print str(x)+'::'
 	# Start with a random question
-	qu = ran(ques)
-	print qu
-	what += str(qu[0])+' '
 
-	pr = ran(preps)
-	print pr
-
-	vp = ran(verbph)
-	print vp
-
-	np = ran(nounph)
-	print np
-
+	what += str(ran(ques)[0])+' '
 	what += chain_phrase(words_tagged,what.split()[-1],5)
 	last = what.split()[-1]
 	what += '?\n'
-	what += last+', '+choice(tgram_by_tag(words_tagged,'PPS','MD'))+', '
-	what += str(pr[0])
+
+	# what += last+', '+choice(bgram_by_tag(words_tagged,'PPS','MD'))+', '
+	what += last+', '+str(ran(mock))+', '
+	what += str(ran(verbph)[0])+' '
+	what += choice(bgram_phrase(words_tagged,what.split()[-1]))+' '
+	what += str(ran(preps)[0])
 	what += '\n\n'
 
 #print our dialogue!
