@@ -6,56 +6,65 @@ from nltkjj import *
 from nltk.corpus import brown
 from random import choice, randint
 
-# text = ''
-# for line in sys.stdin:
-#     text += line
 # brown categories: ['adventure', 'belles_lettres', 'editorial', 'fiction', 'government', 'hobbies', 'humor', 'learned', 'lore', 'mystery', 'news', 'religion', 'reviews', 'romance', 'science_fiction']
 
+cats = ['adventure', 'fiction', 'humor', 'mystery', 'romance', 'science_fiction']
+
 if len(sys.argv) > 1:
-	cats = list(str(sys.argv[1]))
-	iterate = int(sys.argv[2])
+	iterate = int(sys.argv[1])
 else:
-	cats = ['adventure', 'fiction', 'humor', 'mystery', 'romance', 'science_fiction']
 	iterate = 3
 
-words = brown.words(categories=cats)
-sents = brown.sents(categories=cats)
 words_tagged = brown.tagged_words(categories=cats)
 sents_tagged = brown.tagged_sents(categories=cats)
 
 # Create our collection of phrases to be mucked together
-# ques = preps = verbph = nounph = []
-
 # Question beginnings
-ques = phrasebytag(sents_tagged,'W','BE')
+ques = phrase_by_tag(sents_tagged,'W','BE')
 # Prepositional phrases
-preps = phrasebytag(sents_tagged,'IN','AT')
-# Verb phrases
-verbph = phrasebytag(sents_tagged,'R','V')
-# Noun phrases
-nounph = phrasebytag(sents_tagged,'N','V')
+preps = phrase_by_tag(sents_tagged,'IN','AT')
+# Prepositional phrases
+verbph = phrase_by_tag(sents_tagged,'R','V')
 # Special pronoun phrase for mocking
 mock = bgram_by_tag(words_tagged,'PPS','MD')
 
 #start fresh.
-what = ''
+what = []
 
 # We'll do this a few times. Just 3 for now.
 for x in range(0, iterate):
 	# print str(x)+'::'
-	# Start with a random question
+	what.append(x)
 
-	what += str(ran(ques)[0])+' '
-	what += chain_phrase(words_tagged,what.split()[-1],5)
-	last = what.split()[-1]
-	what += '?\n'
+	# Start with a random question fragment
+	what[x] = str(ran(ques)[0])+' '
 
-	# what += last+', '+choice(bgram_by_tag(words_tagged,'PPS','MD'))+', '
-	what += last+', '+str(ran(mock))+', '
-	what += str(ran(verbph)[0])+' '
-	what += choice(bgram_phrase(words_tagged,what.split()[-1]))+' '
-	what += str(ran(preps)[0])
-	what += '\n\n'
+	# Let's hang on to the generated chain
+	chain = chain_phrase(words_tagged,what[x].split()[-1],5)
+
+	what[x] += chain
+
+	# Hang on to the last subject word.
+	last = what[x].split()[-1]
+
+	what[x] += '?\n'
+
+	# Repeat the last subject of the question. Mock it. Repeat the question annoyingly.
+	what[x] += last+', '+str(ran(mock))
+	last = what[x].split()[-1]
+	what[x] += '. '+what[x].split()[0]+'?\n'
+
+	# Repeat original question's predicate
+	what[x] += what[x].split()[1]+' '+what[x].split()[2]+'. '
+
+	# Seemingly eager verb phrase
+	what[x] += str(ran(verbph)[0])+' '
+	# Chain based on verb phrase
+	what[x] += chain_phrase(words_tagged,what[x].split()[-1])+', '
+	# Repeat the final bit of the original question
+	what[x] += chain.split()[-2]+' '+chain.split()[-1]+' '
+	# Prepositional phrase to end the sentence
+	what[x] += str(ran(preps)[0])+'...'
 
 #print our dialogue!
-print what
+print '\n\n'.join(what)

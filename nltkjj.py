@@ -39,7 +39,7 @@ def bgram_by_tag(tagged,tag_pre1,tag_pre2):
 	return list(set(bgrams))
 
 # Function for returning a bigram for a particular word from a tagged corpus of words
-def ibgram_by_word(words,rel_word):
+def bgram_by_word(words,rel_word):
 	return list(set(w2.lower() for (w1, w2) in nltk.ibigrams(words) if w1 == rel_word))
 
 # Function for returning a bigram for a particular word based on the most likely following tag
@@ -68,18 +68,14 @@ def chain_phrase(tagged,rel_word,size=3):
 		bgrams.append(rel_word)
 	return ' '.join(bgrams)
 
-def bgram_phrase(tagged,rel_word):
-	bgrams = []
-	tag = ran(depunc(nextags(tagged,rel_word)))
-	if tag is not None:
-		for ((w1, t1), (w2, t2)) in nltk.bigrams(tagged):
-			if w1 == rel_word and t2.startswith(tag[0]):
-				bgrams.append(w2.lower())
-		if len(bgrams) == 0:
-			bgrams.append(ran(get_words(tagged,tag[0])))
-	else:
-		bgrams.append(ran(get_words(tagged,'N')))
-	return list(set(bgrams))
+# Function for returning a list of trigram phrases based on a set of tags.
+def phrase_by_tag(tagged,tag_pre1,tag_pre2):
+	phrases = []
+	for s in tagged:
+		phrase = tgram_by_tag(s,tag_pre1,tag_pre2)
+		if len(phrase) > 0:
+			phrases.append(depunc(phrase))
+	return phrases
 
 # Function for returning and removing a random element from a list
 def ran(listy):
@@ -99,13 +95,7 @@ def nextags(tagged,word):
 			tags.append(t2)
 	return list(set(tags))
 
-def phrasebytag(tagged,tag_pre1,tag_pre2):
-	phrases = []
-	for s in tagged:
-		phrase = tgram_by_tag(s,tag_pre1,tag_pre2)
-		if len(phrase) > 0:
-			phrases.append(depunc(phrase))
-	return phrases
+
 
 
 
