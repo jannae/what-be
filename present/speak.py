@@ -28,6 +28,7 @@ def talky(voice,txt):
 
 l = 1
 go = raw_input('your line...\n')
+
 for line in open('read'):
 	line = line.strip()
 	if l%2 is not 0:
