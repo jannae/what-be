@@ -1,6 +1,9 @@
 from  AppKit import NSSpeechSynthesizer
+from datetime import datetime
 import time
 import sys
+
+startTime = datetime.now()
 
 # http://stackoverflow.com/questions/12758591/python-text-to-speech-in-macintosh
 
@@ -36,5 +39,10 @@ for line in open('read'):
 	else:
 		if line is not "":
 			talky(alex,line)
-			go = raw_input('your line...\n')
+			go = raw_input('')
+		else:
+			time.sleep(2)
+			print '\n'
 	l += 1
+
+print(datetime.now()-startTime)

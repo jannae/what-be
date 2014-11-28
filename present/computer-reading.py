@@ -44,5 +44,4 @@ for line in open('read'):
 			print '\n'
 	l += 1
 
-
 print(datetime.now()-startTime)

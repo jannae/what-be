@@ -1,20 +1,29 @@
-#What? Be.
+# Final Performance, "What? Be."
 
-##Final Presentation Peformance for RWET. 2013.05.09
+This piece was inspired by two of my favorite playwrights, Samuel Beckett and David Mamet. I attempted to recreate the nonsensical, imperative nature of many of Samuel Beckett's works, and also mimic the rhythmic, terse, repetitive dialogue structure of David Mamet.  It's called What? Be. because every stanza begins with a common question word, followed by an existential copular verb.
 
-15 iterations of What? Be. were generated and read along with the computer speaking the second dialogue part (represented here in blockquote format).
+The following "script" was performed using the built-in Apple Speech Synthesizer as my dialogue partner.
 
-###Live Reading Dialogue:
+To recreate the experience yourself, you can run:
+
+    python speak.py < read
+
+To sit back and watch the computer perform:
+
+    python computer-reading.py < read
+
+## Script:
+
 ***
-who was vague to their financial reports dribbled?  
+who was vague to their financial reports dribbled?
 
->dribbled, i shall. who?  
+>dribbled, i shall. who?
 
 was vague. always retrieve him to ancestors who, reports dribbled in the back...
 ****
 that was mighty whack to ancestors who had?
 
->had, she shouldn't. that?  
+>had, she shouldn't. that?
 
 was mighty. now remembered  who himself toppling, who had for a million...
 ***
@@ -97,12 +106,3 @@ who are older as his brothers had his?
 
 are older. even started  going after lots, had his by the relief...
 ***
-###Command Line:
-the file is a hard-coded link, must be run from this directory:
-	
-	python speak.py
-	
-to have the computer read the entire piece itself as two actors:
-
-	python computer-reading.py
-
